@@ -1,0 +1,117 @@
+<div class="row container-fluid">
+    <div class="col-12">
+        <div class="card mb-4">
+            <div class="card-header pb-0">
+                <div class="d-flex align-items-center">
+                    <h6 class="mb-0">Exams</h6>
+                    <!-- Add Exam button removed -->
+                </div>
+            </div>
+            <div class="card-body px-0 pt-0 pb-2">
+                <div *ngIf="!showResults" class="table-responsive p-0">
+                    <table class="table align-items-center mb-0" style="min-width: 600px;">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Title</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Duration</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Created By</th>
+                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Exams && Exams.length > 0) {
+                                @for (exam of Exams; track exam.id) {
+                                    <tr>
+                                        <td>
+                                            <p class="text-xs text-center font-weight-bold mb-0">{{exam.id}}</p>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-secondary text-xs font-weight-bold">{{exam.title}}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-secondary text-xs font-weight-bold">{{exam.description}}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-xs font-weight-bold text-secondary">{{exam.duration}}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-xs font-weight-bold text-secondary">{{exam.createdBy}}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <i
+                                                [routerLink]="['/exams', exam.id, 'upsert']"
+                                                class="text-info fs-3 mx-1 bi bi-pencil-square"
+                                            ></i>
+                                            <i
+                                                [routerLink]="['/exams', exam.id]"
+                                                class="text-warning fs-3 mx-1 bi bi-eye-fill"
+                                            ></i>
+                                            <i class="text-danger fs-3 mx-1 bi bi-trash3-fill"
+                                            (click)="delete(exam.id)"></i>
+                                        </td>
+                                    </tr>
+                                }
+                            } @else {
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">
+                                        <div class="d-flex flex-column align-items-center justify-content-center">
+                                            <i class="bi bi-folder-x text-muted" style="font-size: 3rem;"></i>
+                                            <p class="text-muted mt-2 mb-0">No exams found</p>
+                                            <button class="btn btn-sm btn-outline-dark mt-3" 
+                                                    [routerLink]="['/exams', 0, 'upsert']">
+                                                Create your first exam
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div *ngIf="showResults" class="table-responsive p-0">
+                    <div class="d-flex align-items-center mb-3">
+                        <h6 class="mb-0">Results for: {{selectedExamTitle}}</h6>
+                        <button class="btn btn-outline-secondary ms-auto" (click)="backToExams()">Back to Exams</button>
+                    </div>
+                    <table class="table align-items-center mb-0" style="min-width: 700px;">
+                        <thead>
+                            <tr>
+                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">Student Name</th>
+                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">Score</th>
+                                <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7">Date Taken</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (examResults && examResults.length > 0) {
+                                @for (result of examResults; track result.studentId) {
+                                    <tr>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-secondary text-xs font-weight-bold">{{result.studentName}}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-secondary text-xs font-weight-bold">{{result.score}}</span>
+                                        </td>
+                                        <td class="align-middle text-center text-sm">
+                                            <span class="text-secondary text-xs font-weight-bold">{{result.dateTaken}}</span>
+                                        </td>
+                                    </tr>
+                                }
+                            } @else {
+                                <tr>
+                                    <td colspan="3" class="text-center py-4">
+                                        <div class="d-flex flex-column align-items-center justify-content-center">
+                                            <i class="bi bi-folder-x text-muted" style="font-size: 3rem;"></i>
+                                            <p class="text-muted mt-2 mb-0">No results found</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

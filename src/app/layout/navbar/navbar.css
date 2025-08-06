@@ -1,0 +1,66 @@
+/* Enhanced Navbar Styles */
+.navbar {
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-radius: 0 0 12px 12px;
+}
+.navbar-brand {
+  color: #198754 !important;
+  font-size: 2.2rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+.navbar-nav .nav-link {
+  color: #444 !important;
+  font-size: 1.1rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link.bg-dark {
+  background: #198754 !important;
+  color: #fff !important;
+}
+.navbar-nav .nav-item {
+  margin: 0 0.3rem;
+}
+.btn-light.dropdown-toggle {
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+  background: #f8f9fa;
+  color: #333;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.btn-light.dropdown-toggle:hover {
+  background: #e9ecef;
+}
+.dropdown-menu {
+  border-radius: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.dropdown-item {
+  font-size: 1rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+.dropdown-item:hover, .dropdown-item.bg-dark {
+  background: #198754 !important;
+  color: #fff !important;
+}
+.account-username {
+  margin-left: 1rem;
+  font-weight: 600;
+  color: #198754;
+  font-size: 1.1rem;
+}
+@media (max-width: 991px) {
+  .navbar-nav .nav-link {
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+  }
+}
+a:hover{
+    background-color: lightgray;
+}

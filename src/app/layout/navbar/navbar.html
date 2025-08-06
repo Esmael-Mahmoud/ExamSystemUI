@@ -1,0 +1,56 @@
+<nav class="navbar navbar-expand-lg bg-white py-3 shadow-sm">
+        <div class="container">
+            <a class="navbar-brand text-success fs-1 fw-bold" href="#">Exam Pro System</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto"> 
+                    <li class="nav-item">
+                        <a class="nav-link text-secondary fw-semibold mx-3"
+                         [routerLink]="['/home']" [routerLinkActive]="'bg-dark text-light'" [routerLinkActiveOptions]="{exact:true}">Home</a>
+                    </li>
+                @if(userRole=='Teacher'){
+                }
+                 
+                    <li class="nav-item" *ngIf="userRole==='Teacher'">
+                        <a class="nav-link text-secondary fw-semibold mx-3" 
+                        [routerLink]="['/teacher-dashboard']" [routerLinkActive]="'bg-dark text-light'"
+                        [routerLinkActiveOptions]="{exact:true}">Teacher Dashboard</a>
+                    </li>
+                    <li class="nav-item" *ngIf="userRole === 'Student'">
+                        <a class="nav-link text-secondary fw-semibold mx-3"
+                         [routerLink]="['/AvailableExams']" [routerLinkActive]="'bg-dark text-light'" [routerLinkActiveOptions]="{exact:true}">Student Dashboard</a>
+                    </li>
+
+                    <li class="nav-item" *ngIf="userRole === 'Teacher'||userRole === 'Student'">
+                        <a class="nav-link text-secondary fw-semibold mx-3"
+                         [routerLink]="['/result']" [routerLinkActive]="'bg-dark text-light'" [routerLinkActiveOptions]="{exact:true}">Results</a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center">
+                    <div class="dropdown me-2">
+                        <a class="btn btn-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            [routerLink]="['/account']"
+                            [routerLinkActive]="'text-danger'"
+                            [routerLinkActiveOptions]="{exact:true}">
+                            Account
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            @if(!isLogged){
+                                     <li><a class="dropdown-item" [routerLink]="['/account/register']"
+                                [routerLinkActive]="'bg-dark text-light'" [routerLinkActiveOptions]="{exact:true}">Register</a></li>
+                            }
+                           
+                            <li *ngIf="!isLogged"><a class="dropdown-item" [routerLink]="['/account/login']"
+                                [routerLinkActive]="'bg-dark text-light'" [routerLinkActiveOptions]="{exact:true}">Login</a></li>
+                           <li *ngIf="isLogged"><a class="dropdown-item" 
+                                (click)="logout()" style="cursor: pointer;">Logout</a></li>
+                        </ul>
+                    </div>
+                    <span *ngIf="userName" class="fw-semibold text-success">{{ userName }}</span>
+                </div>
+            </div>
+        </div>
+    </nav>

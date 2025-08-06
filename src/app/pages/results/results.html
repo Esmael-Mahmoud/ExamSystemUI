@@ -1,0 +1,149 @@
+<div class="container">
+    <div class="controls">
+        <!-- Enhanced Search Box -->
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search" style="padding-left: 20px;"></i>
+                <input type="text" 
+                       [formControl]="searchControl"
+                       placeholder=" Search student or exam..."
+                       *ngIf="userRole=='Teacher'"
+                       (focus)="showSuggestions = true"
+                       (blur)="onSearchBlur()">
+                                       <input type="text" 
+                       [formControl]="searchControl"
+                       placeholder=" Search exam..."
+                       *ngIf="userRole=='Student'"
+                       (focus)="showSuggestions = true"
+                       (blur)="onSearchBlur()">
+                
+                <!-- Suggestions Dropdown -->
+                @if (showSuggestions && suggestions.length > 0) {
+                <div class="suggestions-box">
+                    @for (suggestion of suggestions; track $index) {
+                    <div class="suggestion-item" 
+                         (mousedown)="selectSuggestion(suggestion)">
+                        <i class="fas" 
+                           [class.fa-user]="suggestion.startsWith('Student')"
+                           [class.fa-book]="suggestion.startsWith('Exam')"></i> 
+                        {{suggestion}}
+                    </div>
+                    }
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="results-table">
+        @if(userRole=="Teacher")
+       { <table>
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Subject</th>
+                    <th>Grade</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+              @for (result of pagedResults; track $index) {
+                <tr>
+                    <td>
+                        <div class="student-info">
+                            
+                            <div class="avatar">{{result.studentName[0]}}</div>
+                            <div>{{result.studentName}}</div>
+                        </div>
+                    </td>
+                    <td>{{result.examTitle}}</td>
+                    <td>
+                      @if(+result.degree >= 60 && +result.degree < 70){<span class="grade poor">D {{result.degree}}</span>}
+                      @else if(+result.degree >= 70 && +result.degree < 80){<span class="grade average">C {{result.degree}}</span>}
+                      @else if(+result.degree >= 80 && +result.degree < 90){<span class="grade good">B {{result.degree}}</span>}
+                      @else if(+result.degree >= 90){<span class="grade excellent">A {{result.degree}}</span>}
+                      @else{<span class="grade">F {{result.degree}}</span>}
+                    </td>
+                    <td class="date">{{result.submittedAt}}</td>
+                </tr>
+              }
+              @empty {
+                <tr>
+                  <td colspan="4" class="no-results">
+                    @if (searchTerm) {
+                      No results found for "{{searchTerm}}"
+                    } @else {
+                      No results available
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+        </table>}
+        @else{<table>
+            <thead>
+                <tr>
+                    <th>Subject</th>
+                    <th>Grade</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+              @for (result of pagedResults; track $index) {
+                <tr>
+                    <!-- <td>
+                        <div class="student-info">
+                            
+                            <div class="avatar">{{result.studentName[0]}}</div>
+                            <div>{{result.studentName}}</div>
+                        </div>
+                    </td> -->
+                    <td>{{result.examTitle}}</td>
+                    <td>
+                      @if(+result.degree >= 60 && +result.degree < 70){<span class="grade poor">D {{result.degree}}</span>}
+                      @else if(+result.degree >= 70 && +result.degree < 80){<span class="grade average">C {{result.degree}}</span>}
+                      @else if(+result.degree >= 80 && +result.degree < 90){<span class="grade good">B {{result.degree}}</span>}
+                      @else if(+result.degree >= 90){<span class="grade excellent">A {{result.degree}}</span>}
+                      @else{<span class="grade">F {{result.degree}}</span>}
+                    </td>
+                    <td class="date">{{result.submittedAt}}</td>
+                </tr>
+              }
+              @empty {
+                <tr>
+                  <td colspan="4" class="no-results">
+                    @if (searchTerm) {
+                      No results found for "{{searchTerm}}"
+                    } @else {
+                      No results available
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+        </table>}
+        
+        <!-- Pagination Controls -->
+        <div class="pagination-controls">
+            <div class="pagination-summary">{{ getPaginationSummary() }}</div>
+            
+            <div class="pagination-buttons">
+                <button (click)="prevPage()" [disabled]="currentPage === 1">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <div class="page-indicator">
+                    Page {{ currentPage }} of {{ totalPages() || 1 }}
+                </div>
+                
+                <button (click)="nextPage()" [disabled]="currentPage >= totalPages()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© Created by Eng. Esmael Mahmoud</p>
+    </div>
+</div>

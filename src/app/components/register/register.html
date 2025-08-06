@@ -1,0 +1,34 @@
+
+
+      <div class="auth-container shadow-lg rounded-lg p-5 bg-white">
+        <h2 class="text-center mb-4 text-gradient">Create Account</h2>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form-signin">
+          <div class="form-group mb-4">
+            <label class="form-label text-muted">Email Address</label>
+            <input formControlName="email" type="text" class="form-control form-control-lg" 
+                   [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}" />
+            <div class="invalid-feedback" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+              Please enter a valid email address
+            </div>
+          </div>
+          <div class="form-group mb-4">
+            <label class="form-label text-muted">Password</label>
+            <input formControlName="password" type="password" class="form-control form-control-lg" 
+                   [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}" />
+            <div class="invalid-feedback" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+              Password must be at least 6 characters
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary btn-lg btn-block mt-4 gradient-btn" 
+                  [disabled]="loading || registerForm.invalid">
+            <span *ngIf="!loading">Register Now</span>
+            <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+          </button>
+          <div class="alert mt-4" 
+               [ngClass]="{'alert-success': message.includes('success'), 'alert-danger': message && !message.includes('success')}" 
+               *ngIf="message">
+            {{ message }}
+          </div>
+        </form>
+      </div>
+  

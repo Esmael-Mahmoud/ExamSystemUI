@@ -1,0 +1,10 @@
+.footer-link-list a:hover,
+.footer-icons a:hover {
+  color: green !important; 
+  text-decoration: underline; 
+}
+
+input::placeholder {
+  color: #999; /* Light gray */
+  opacity: 1;  /* Optional: to ensure full opacity */
+}

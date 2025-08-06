@@ -1,0 +1,109 @@
+   
+
+    <div class="container my-5" >
+  <div class="card shadow m-5">
+    <div class="card-header text-white bg-dark d-flex justify-content-center">
+            <h2 class="app-title card-title"> {{ExamId == 0?"Add New Exam":"Edit Exam"}}</h2>
+    </div>
+
+    <div class="card-body">
+   <form [formGroup]="ExamForm" (ngSubmit)="ExamHandler()">    
+          <div class="row g-3 mb-4">
+              <div class="col-md-12">
+                <input formControlName="title" type="text" class="form-control alert alert-secondary" placeholder="Enter Exam Title" >
+              @if(getTitle.touched&& getTitle.hasError('required')){
+              <span class="alert alert-warning text-danger">Exam Title is Required</span>
+              }
+              @else if (getTitle.hasError('minlength')) {
+             <span class="alert alert-warning text-danger">Exam Title can't be less than 2 chars</span>
+
+              }
+            </div>
+             
+             
+              <div class="col-md-12">
+                <input formControlName="description" type="text" class="form-control alert alert-secondary" placeholder="Enter Exam Description" >
+                  @if(getDescription.touched&& getDescription.hasError('required')){
+              <span class="alert alert-warning text-danger">Exam Description is Required</span>
+              }
+             
+            </div>
+              <div class="col-md-12">
+                <input formControlName="duration" type="text" class="form-control alert alert-secondary" placeholder="Enter Exam Duration in Mins" >
+               @if(getDuration.touched&& getDuration.hasError('required')){
+              <span class="alert alert-warning text-danger">Exam Duration is Required</span>
+              }
+              @else if (getDuration.hasError('minlength')) {
+             <span class="alert alert-warning text-danger">Exam Duration can't be less than 15 Mins</span>
+,
+              }
+            </div>
+             
+          
+             
+            <div formArrayName="questions" >
+              <div
+                *ngFor="let ques of getQuestions.controls; let i = index"
+                [formGroupName]="i"
+                class="mb-3 p-3  rounded"
+                style="border: 2px solid black;"
+              >
+              <label class="mb-1 fw-bold text-decoration-underline">Question {{i+1}}: </label>
+                <input
+                  type="text"
+                  formControlName="QuestionText"
+                  class="form-control mb-2"
+                  placeholder="Enter Question Text"
+                />
+                <select formControlName="QuestionType" class="form-control mb-2" (change)="onQuestionTypeChange(i, $event)">
+                  <option value="">Select Question Type</option>
+                  <option value="MCQ">MCQ</option>
+                  <option value="TF">True / False</option>
+                  <!-- <option value="Text">Text</option> -->
+                </select>
+                <span class="text-danger" *ngIf="ques.errors?.['missingChoices'] && ques.touched">
+                  This question requires at least two choices.
+                </span>
+                <div>
+                  <button type="button" class="col-6 btn btn-sm btn-danger" (click)="removeQuesField(i)">
+                    Remove Question
+                  </button>
+                  <button type="button" class="col-6 btn btn-sm btn-outline-info" (click)="addChoice(i)">
+                    Add Choice
+                  </button>
+                </div>
+              
+                <div formArrayName="choices">
+                  <div
+                    *ngFor="let choice of getChoices(i).controls; let j = index"       
+                    [formGroupName]="j"
+                    class="p-2 my-2 rounded"
+                    style="border: 2px solid gray;"
+                  >
+                  <label class="fw-bold text-decoration-underline mb-1"> Choice {{j+1}}:  </label>
+                    <input class="form-control " formControlName="ChoiceText" placeholder="Enter Choice Text" />
+                    <div class="d-flex">
+                        <input id="correctAnswer{{j}}" class="form-check " type="checkbox" formControlName="IsCorrect" /> 
+                        <label for="correctAnswer{{j}}">Correct Answer?</label>
+                    </div>
+            
+                    <button class="form-control btn btn-sm btn-danger" type="button" (click)="removeChoiceField(i, j)">Remove Choice</button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+             <div >
+                <button class="form-control btn btn-outline-dark"  (click)="addQuesField()">Add Question</button>
+              </div>
+              <div class="col-12 text-center">
+                  <button class="btn btn-outline-dark col-6" [routerLink]="['/exams']">Back To Exams</button>
+
+                <button type="submit" [disabled]="ExamForm.invalid "  class="btn btn-outline-success col-6 ">
+                  {{ExamId == 0?"Add New Exam":"Edit Exam"}}
+                </button>
+              </div>
+          </div>
+    </form>
+    </div>
+</div>

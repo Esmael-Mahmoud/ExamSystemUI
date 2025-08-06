@@ -1,0 +1,19 @@
+<div class="container mt-5 p-5">
+  <div class="row justify-content-center align-items-center">
+    <div class="col-md-6 text-center mb-5 mb-md-0">
+      <div class="hero-section p-4 rounded-lg">
+        <h1 class="display-4 font-weight-bold text-primary mb-4">Welcome!</h1>
+        <img src="iti.jpeg" class="img-fluid rounded-circle shadow-lg mb-4" style="max-width: 200px; border: 5px solid white;">
+        <p class="lead text-muted">Join our community to access exclusive features</p>
+        <a href="#" class="btn btn-outline-primary btn-lg mt-3">Learn More</a>
+      </div>
+     
+    </div>
+    @if(!token){
+    <div class="col-md-6" >
+      <router-outlet />
+    </div>
+    }
+   
+  </div>
+</div>

@@ -1,0 +1,42 @@
+/* Add these styles to your component's CSS or global styles */
+.text-gradient {
+  background: linear-gradient(45deg, #3f51b5, #2196f3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.gradient-btn {
+  background: linear-gradient(45deg, #3f51b5, #2196f3);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.gradient-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.auth-container {
+  border-top: 5px solid #3f51b5;
+}
+
+.form-control-lg {
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s;
+}
+
+.form-control-lg:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 0 0.2rem rgba(63, 81, 181, 0.25);
+}
+
+.rounded-lg {
+  border-radius: 1rem !important;
+}

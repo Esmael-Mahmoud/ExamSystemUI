@@ -1,0 +1,44 @@
+
+<div class="container my-5">
+  <div class="card shadow m-5">
+    <div class="card-header text-white bg-dark d-flex justify-content-center">
+      <h2 class="app-title card-title">Exam Details</h2>
+    </div>
+    <div class="card-body">
+      <div *ngIf="!Exam">
+        <div class="alert alert-info">Loading exam details...</div>
+      </div>
+      <div *ngIf="Exam">
+        <h4>Title: {{ Exam.title }}</h4>
+        <p><b>Description:</b> {{ Exam.description }}</p>
+        <p><b>Duration:</b> {{ Exam.duration }} mins</p>
+        <div *ngIf="Exam.Questions && Exam.Questions.length > 0">
+          <ng-container *ngIf="pagedQuestions && pagedQuestions.length > 0">
+            <div *ngFor="let q of pagedQuestions; let i = index" class="mb-4 p-3 rounded" style="border: 2px solid #333;">
+              <div class="fw-bold mb-2">Q{{ (currentPage-1)*pageSize + i + 1 }}: {{ q.questionText }}</div>
+              <div *ngIf="q.questionType === 'MCQ'">
+                <ul>
+                  <li *ngFor="let c of q.choices">{{ c.choiceText }} <span *ngIf="c.isCorrect" class="text-success">(Correct)</span></li>
+                </ul>
+              </div>
+              <div *ngIf="q.questionType === 'TF'">
+                <span>Correct Answer: <b>{{ q.tfCorrectAnswer ? 'True' : 'False' }}</b></span>
+              </div>
+              <div *ngIf="q.questionType === 'Text'">
+                <span>Text Answer</span>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center my-3">
+              <button type="button" class="btn btn-secondary" (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
+              <span>Page {{currentPage}} / {{totalPages}}</span>
+              <button type="button" class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+            </div>
+          </ng-container>
+        </div>
+        <div *ngIf="!Exam.Questions || Exam.Questions.length === 0">
+          <div class="alert alert-warning">No questions found for this exam.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

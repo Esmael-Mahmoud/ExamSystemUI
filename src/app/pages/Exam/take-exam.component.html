@@ -1,0 +1,164 @@
+<div class="exam-page-container">
+  <div *ngIf="loading" class="loading">Loading exam...</div>
+  <!-- Exam Form -->
+  <form *ngIf="!loading && !submitted" [formGroup]="form" (ngSubmit)="submitExam()" class="exam-form">
+    <div *ngIf="!loading && !submitted" class="exam-timer">
+      <div class="timer-display" [class.warning]="isTimeWarning()" [class.critical]="isTimeCritical()">
+        Time Remaining: {{ remainingTime }}
+      </div>
+    </div>
+    
+    <div formArrayName="answers">
+      <div *ngFor="let idx of pagedAnswersArray; let j = index" [formGroupName]="idx" class="question-block">
+        <div class="question-title"><b>Q{{idx+1}}: {{ questions[idx].text }}</b></div>
+        <div *ngIf="questions[idx].type === 'MCQ'" class="choices-list">
+          <div *ngFor="let c of questions[idx].choices" class="choice-item">
+            <label>
+              <input type="radio" [formControlName]="'choiceId'" [value]="c.id"> {{ c.text }}
+            </label>
+          </div>
+        </div>
+        <div *ngIf="questions[idx].type === 'Text'" class="text-answer-block">
+          <textarea formControlName="textAnswer" rows="3" cols="40" placeholder="Type your answer..."></textarea>
+        </div>
+        <div *ngIf="questions[idx].type === 'TF'" class="tf-answer-block">
+          <div *ngIf="questions[idx].choices && questions[idx].choices.length > 0; else tfError">
+            <div *ngFor="let c of questions[idx].choices" class="choice-item">
+              <label>
+                <input type="radio" formControlName="choiceId" [value]="c.id"> {{ c.text }}
+              </label>
+            </div>
+          </div>
+          <ng-template #tfError>
+            <div class="alert alert-warning">
+              <strong>Question Setup Error:</strong> This True/False question is missing choices. Please contact your instructor to recreate this question.
+            </div>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center my-3">
+      <button type="button" class="btn btn-secondary" (click)="prevPage()" [disabled]="currentPage === 1">Prev</button>
+      <span>Page {{currentPage}} / {{totalPages}}</span>
+      <button type="button" class="btn btn-primary" (click)="nextPage()" [disabled]="currentPage === totalPages">Next</button>
+    </div>
+    <button *ngIf="userRole !== 'Teacher'" type="submit" [disabled]="form.invalid || submitting" class="btn btn-primary submit-btn">Submit Exam</button>
+  </form>
+
+  <!-- Result Review Section -->
+  <div *ngIf="submitted && resultDetails" class="result-review">
+    <h2>Exam Review</h2>
+    <div *ngFor="let q of resultDetails.questions; let i = index" class="question-block">
+      <div class="question-title"><b>Q{{i+1}}: {{ q.text }}</b></div>
+      <div *ngIf="q.type === 'MCQ'" class="choices-list">
+        <div *ngFor="let c of q.choices" class="choice-item"
+          [ngClass]="{
+            'correct': c.id === q.correctChoiceId,
+            'selected': c.id === q.selectedChoiceId && c.id !== q.correctChoiceId,
+            'wrong': c.id === q.selectedChoiceId && c.id !== q.correctChoiceId
+          }">
+          <label>
+            <input type="radio" [checked]="c.id === q.selectedChoiceId" disabled> {{ c.text }}
+            <span *ngIf="c.id === q.correctChoiceId" class="correct-label">(Correct Answer)</span>
+            <span *ngIf="c.id === q.selectedChoiceId && c.id !== q.correctChoiceId" class="wrong-label">(Your Answer)</span>
+          </label>
+        </div>
+      </div>
+      <div *ngIf="q.type === 'Text'" class="text-answer-block">
+        <div><b>Your Answer:</b> {{ q.userTextAnswer }}</div>
+        <div><b>Expected:</b> {{ q.correctTextAnswer }}</div>
+      </div>
+      <div *ngIf="q.type === 'TF'" class="tf-answer-block">
+        <div><b>Your Answer:</b> {{ q.userTFAnswer ? 'True' : 'False' }}</div>
+        <div><b>Expected:</b> {{ q.correctTFAnswer ? 'True' : 'False' }}</div>
+      </div>
+    </div>
+    <button *ngIf="showResultButton" (click)="goToDashboard()" class="btn btn-primary submit-btn">Show Result</button>
+  </div>
+</div>
+
+<style>
+/* ...existing styles... */
+.result-review .correct {
+  background: #d4edda;
+}
+.result-review .wrong {
+  background: #f8d7da;
+}
+.result-review .selected {
+  border: 1px solid #ffc107;
+}
+.correct-label {
+  color: #28a745;
+  font-weight: bold;
+  margin-left: 8px;
+}
+.wrong-label {
+  color: #dc3545;
+  font-weight: bold;
+  margin-left: 8px;
+}
+</style>
+
+<style>
+.exam-page-container {
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+}
+.exam-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.question-block {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.2rem 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.question-title {
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+}
+.choices-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.choice-item label {
+  font-size: 1rem;
+  color: #333;
+}
+.text-answer-block textarea {
+  width: 100%;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  font-size: 1rem;
+  resize: vertical;
+}
+.btn.btn-primary.submit-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.7rem 2rem;
+  font-size: 1.1rem;
+  cursor: pointer;
+  align-self: flex-end;
+  transition: background 0.2s;
+}
+.btn.btn-primary.submit-btn:hover {
+  background: #0056b3;
+}
+.loading {
+  color: #888;
+  text-align: center;
+  margin: 2rem 0;
+}
+</style>
